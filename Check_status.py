@@ -104,12 +104,20 @@ class MyWindow(QMainWindow):
         self.lbl_result.setText('STATUS: ')
         self.lbl_result.move(50, 200)
         self.lbl_result.resize(600, 190)
+        rfont = QFont()
+        rfont.setPointSize(10)  
+        self.lbl_result.setFont(rfont)
 
-    
+    def event(self, event):
+        if event.type() == QtCore.QEvent.KeyPress:
+            if event.key() in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
+                self.focusNextPrevChild(True)
+        return super().event(event)   
+         
     def stat(self):
     # Checks if the QLineEdit txt_grade and txt_year fields are empty or not
         if not self.txt_Grade.text().strip() or not self.txt_year.text().strip():
-            self.lbl_result.setText("please fill the empty fields, \n and proceed clicking the button above")
+            self.lbl_result.setText("please fill any empty fields, before clicking the button.")
         else:
             try:
                 fList = open(f'{path}\{self.txt_year.text()}_{self.txt_Grade.text()}.txt', 'r')
@@ -128,7 +136,7 @@ class MyWindow(QMainWindow):
                 self.btn_check.show()
                 self.lbl_result.clear()
             except:
-                self.lbl_result.setText("Sorry for the inconvenience, the file you're trying to open \n doesn't exist :(")
+                self.lbl_result.setText("Sorry, But the file you're trying to open doesn't exist :(")
             pass
         
 
@@ -140,25 +148,26 @@ class MyWindow(QMainWindow):
             fList = open(f'{path}\{self.txt_year.text()}_{self.txt_Grade.text()}.txt', 'r')
             Name = f"{self.txt_Fname.text()} {self.txt_Lname.text()} {self.txt_Gfname.text()}"
             Name = Name.title()
-
+            fName = Name.split()
             #A flag used to check if a match or result has been found in flist
-            found = False
+            isfound = False
 
             #Gets students names from the saved file line by line and stores it temporarily in line
             for line in fList:
                 line = line.rstrip()
+            
                 # nested if compares if the input name is equal to the line we got from our file(line of saved name) if it's equal it congradulates the user for being accepted.
                 if Name == line:
-                    self.lbl_result.setText(f"Hello! {Name} congratulations  you've been accepted! :)")
+                    self.lbl_result.setText(f"Hello! {fName[0]} congratulations  you've been accepted! :)")
 
-                    found = True
+                    isfound = True
                     break
                 else:
                     self.lbl_result.setText(f"Checking if {Name}  is in the accepted list...")
                     continue
             # if a match wasn't found in the above code it tells them they're not accepted.
-            if not found: 
-                self.lbl_result.setText(f"sorry {Name}  is not found in the accepted list :(")
+            if not isfound: 
+                self.lbl_result.setText(f"sorry {fName[0]}  you are not in the accepted list :(")
 def window():
     app = QApplication(sys.argv)
     win = MyWindow()

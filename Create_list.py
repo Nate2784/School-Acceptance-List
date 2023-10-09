@@ -102,7 +102,7 @@ class MyWindow(QMainWindow):
         self.lbl_result.move(50, 280)
         self.lbl_result.resize(600, 60)
         rfont = QFont()
-        rfont.setPointSize(9)  
+        rfont.setPointSize(10)  
         self.lbl_result.setFont(rfont)
 
         self.btn_clear = QtWidgets.QPushButton('Clear files', self)
@@ -114,7 +114,13 @@ class MyWindow(QMainWindow):
         self.btn_back.setToolTip('Add more students')
         self.btn_back.hide()
 
-
+    
+    def event(self, event):
+        if event.type() == QtCore.QEvent.KeyPress:
+            if event.key() in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
+                self.focusNextPrevChild(True)
+        return super().event(event)   
+         
 
     def nextStudent(self):
          
@@ -123,7 +129,7 @@ class MyWindow(QMainWindow):
          sname = name.split()
          cname = len(sname)
          
-         if cname == 3 or cname == 4:
+         if cname == 3:
              self.names.append(name.strip())
     
              self.txt_Fname.clear()
@@ -199,7 +205,7 @@ class MyWindow(QMainWindow):
     def clear_directory(self):
         #clears all list files created previously if they exist, if they dont itt prints a message saying no files found.
         if not os.listdir('C://lists'):
-            self.lbl_result.setText(' No files found in lists foleder :)')
+            self.lbl_result.setText(' No files found in lists -folder- :)')
         # Perform some action
         else:
             files = glob.glob('C://lists/*')
@@ -207,7 +213,7 @@ class MyWindow(QMainWindow):
             for f in files:
                 os.remove(f)
                 fcount += 1
-            self.lbl_result.setText(f' {fcount} Files removed successfully! From the directory "C://lists" :)')
+            self.lbl_result.setText(f' {fcount} Files removed successfully! :)')
            
 def window():
     app = QApplication(sys.argv)
