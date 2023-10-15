@@ -9,5 +9,3 @@ after sucessfuly installing python in your system
   -- to do that open your terminal and type 'pip install PyQt5'
 
 the above guide will only work  on WINDOWS devices!
-
-on mac devices u can do so by downloading python on your system and installing the library PyQt5 on your device thanks.
